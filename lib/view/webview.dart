@@ -9,8 +9,9 @@ import '../utils.dart';
 class FlutterwaveWebview extends StatefulWidget {
   final String _url;
   final String _redirectUrl;
+  final bool _isTestMode;
 
-  FlutterwaveWebview(this._url, this._redirectUrl);
+  FlutterwaveWebview(this._url, this._redirectUrl, this._isTestMode);
 
   @override
   _FlutterwaveWebviewState createState() => _FlutterwaveWebviewState();
@@ -26,6 +27,7 @@ class _FlutterwaveWebviewState extends State<FlutterwaveWebview> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: widget._isTestMode,
       home: Scaffold(
         body: SafeArea(
           child: Container(

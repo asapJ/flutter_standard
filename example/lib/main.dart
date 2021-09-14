@@ -219,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
         context: context,
         style: style,
         publicKey: this.publicKeyController.text.trim().isEmpty
-            ? this.pbk
+            ? this.getPublicKey()
             : this.publicKeyController.text.trim(),
         currency: this.selectedCurrency,
         txRef: Uuid().v1(),
@@ -238,6 +238,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  String getPublicKey() {
+    if (isTestMode) return "FLWPUBK_TEST-X";
+    return "FLWPUBK-X";
+  }
+
   void _openBottomSheet() {
     showModalBottomSheet(
         context: this.context,
@@ -247,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _getCurrency() {
-    final currencies = ["NGN", "RWF", "UGX", "ZAR", "USD"];
+    final currencies = ["NGN", "RWF", "UGX", "ZAR", "USD", "GHS"];
     return Container(
       height: 250,
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),

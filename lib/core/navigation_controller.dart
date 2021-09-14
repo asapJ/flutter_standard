@@ -47,12 +47,13 @@ class NavigationController {
   /// Opens browser with URL returned from startTransaction()
   Future<Map<String, dynamic>> openBrowser(
       final String url,
-      final String redirectUrl
+      final String redirectUrl,
+      [final bool isTestMode = false]
       ) async {
     var response = await Navigator.push(
       _buildContext,
       MaterialPageRoute(
-          builder: (context) => FlutterwaveWebview(url, redirectUrl)),
+          builder: (context) => FlutterwaveWebview(url, redirectUrl, isTestMode)),
     );
     if (response == null) {
       Map<String, dynamic> errorResponse = {
