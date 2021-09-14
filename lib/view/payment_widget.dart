@@ -33,10 +33,10 @@ class _PaymentState extends State<PaymentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    controller =
-        NavigationController(context, Client(), widget.style);
+    controller = NavigationController(context, Client(), widget.style);
     return MaterialApp(
       navigatorKey: _navigatorKey,
+      debugShowCheckedModeBanner: widget.request.isTestMode,
       home: Scaffold(
         backgroundColor: widget.style.getMainBackgroundColor(),
         appBar: FlutterwaveViewUtils.appBar(
@@ -93,11 +93,12 @@ class _PaymentState extends State<PaymentWidget> {
   }
 
   void _handlePaymentComplete(ChargeResponse response) {
-    Navigator.pop(context, response);
+    Navigator.pop(context, response); // return response to user
   }
 
   void _showError(final String errorMessage) {
     FlutterwaveViewUtils.showToast(context, errorMessage);
+    Navigator.pop(context); // return response to user
   }
 
   void _showConfirmDialog() {
