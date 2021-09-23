@@ -64,6 +64,7 @@ class Flutterwave {
         builder: (context) => PaymentWidget(
           request: request,
           style: style ?? FlutterwaveStyle(),
+          mainContext: context,
         ),
       ),
     );

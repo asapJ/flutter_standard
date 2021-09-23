@@ -1,66 +1,50 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutterwave_standard/core/transaction_status.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutterwave_standard/core/TransactionCallBack.dart';
+import 'package:flutterwave_standard/view/FlutterwaveWebView.dart';
 import 'package:flutterwave_standard/view/flutterwave_style.dart';
-import 'package:flutterwave_standard/view/webview.dart';
 import 'package:http/http.dart';
 
 import '../models/TransactionError.dart';
 import '../models/requests/standard_request.dart';
-import '../models/responses/charge_response.dart';
 import '../models/responses/standard_response.dart';
 
 class NavigationController {
-  BuildContext _buildContext;
   Client client;
   final FlutterwaveStyle? style;
+  final TransactionCallBack _callBack;
 
-  NavigationController(this._buildContext, this.client, this.style);
-
+  NavigationController(this.client, this.style, this._callBack);
 
   /// Initiates initial transaction to get web url
-  Future<ChargeResponse> startTransaction(final StandardRequest request) async {
+  startTransaction(final StandardRequest request) async {
     try {
       final StandardResponse standardResponse =
-          await request.execute(this.client);
+      await request.execute(this.client);
       if (standardResponse.status == "error") {
         throw (TransactionError(standardResponse.message!));
       }
-      final Map response = await openBrowser(
+      openBrowser(
           standardResponse.data?.link ?? "", request.redirectUrl);
-      return _handleResponse(response);
     } catch (error) {
       throw (error);
     }
   }
 
-
-  ChargeResponse _handleResponse(response) {
-    final status = response["status"];
-    if (TransactionStatus.CANCELLED.toString() == status) {
-      throw (TransactionError("Transaction cancelled"));
-    }
-    return ChargeResponse.fromJson(response);
-  }
-
-
   /// Opens browser with URL returned from startTransaction()
-  Future<Map<String, dynamic>> openBrowser(
-      final String url,
-      final String redirectUrl,
-      [final bool isTestMode = false]
-      ) async {
-    var response = await Navigator.push(
-      _buildContext,
-      MaterialPageRoute(
-          builder: (context) => FlutterwaveWebview(url, redirectUrl, isTestMode)),
+  openBrowser(
+      final String url, final String redirectUrl,
+      [final bool isTestMode = false]) async {
+    final FlutterwaveInAppBrowser browser =
+        FlutterwaveInAppBrowser(callBack: _callBack);
+
+    var options = InAppBrowserClassOptions(
+      crossPlatform: InAppBrowserOptions(hideUrlBar: true),
+      inAppWebViewGroupOptions: InAppWebViewGroupOptions(
+        crossPlatform: InAppWebViewOptions(javaScriptEnabled: true),
+      ),
     );
-    if (response == null) {
-      Map<String, dynamic> errorResponse = {
-        "status": TransactionStatus.CANCELLED
-      };
-      return errorResponse;
-    }
-    return response;
+
+    await browser.openUrlRequest(
+        urlRequest: URLRequest(url: Uri.parse(url)), options: options);
   }
 }

@@ -228,7 +228,8 @@ class _MyHomePageState extends State<MyHomePage> {
         subAccounts: subAccounts,
         paymentOptions: "card, payattitude",
         customization: Customization(title: "Test Payment"),
-        isTestMode: isTestMode);
+        redirectUrl: "https://www.google.com",
+        isTestMode: false);
     final ChargeResponse response = await flutterwave.charge();
     if (response != null) {
       this.showLoading(response.status);
@@ -239,7 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   String getPublicKey() {
-    if (isTestMode) return "FLWPUBK_TEST-X";
+    if (isTestMode) return "FLWPUBK_TEST-02b9b5fc6406bd4a41c3ff141cc45e93-X";
     return "FLWPUBK-X";
   }
 
@@ -252,7 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _getCurrency() {
-    final currencies = ["NGN", "RWF", "UGX", "ZAR", "USD", "GHS"];
+    final currencies = ["NGN", "RWF", "UGX", "ZAR", "USD", "GHS", "TZS"];
     return Container(
       height: 250,
       margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
