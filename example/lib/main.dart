@@ -228,6 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
         subAccounts: subAccounts,
         paymentOptions: "card, payattitude",
         customization: Customization(title: "Test Payment"),
+        redirectUrl: "https://www.google.com",
         isTestMode: isTestMode);
     final ChargeResponse response = await flutterwave.charge();
     if (response != null) {
@@ -239,8 +240,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   String getPublicKey() {
-    if (isTestMode) return "FLWPUBK_TEST-6f008dca68dc8988715b929f2861da41-X";
-    return "FLWPUBK-0d419508376ec40a29876a3f97730485-X";
+    if (isTestMode) return "FLWPUBK_TEST--X";
+    return "FLWPUBK-X";
   }
 
   void _openBottomSheet() {
