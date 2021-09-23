@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterwave_standard/core/TransactionCallBack.dart';
 import 'package:flutterwave_standard/models/requests/standard_request.dart';
 import 'package:flutterwave_standard/models/responses/charge_response.dart';
 import 'package:flutterwave_standard/core/navigation_controller.dart';
@@ -20,7 +21,8 @@ class PaymentWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _PaymentState();
 }
 
-class _PaymentState extends State<PaymentWidget> {
+class _PaymentState extends State<PaymentWidget>
+    implements TransactionCallBack {
   final _navigatorKey = GlobalKey<NavigatorState>();
   bool _isDisabled = false;
   late NavigationController controller;
@@ -33,7 +35,7 @@ class _PaymentState extends State<PaymentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    controller = NavigationController(context, Client(), widget.style);
+    controller = NavigationController(Client(), widget.style, this);
     return MaterialApp(
       navigatorKey: _navigatorKey,
       debugShowCheckedModeBanner: widget.request.isTestMode,
@@ -77,12 +79,11 @@ class _PaymentState extends State<PaymentWidget> {
     try {
       Navigator.of(context).pop(); // to remove confirmation dialog
       _toggleButtonActive(false);
-      final response = await controller.startTransaction(widget.request);
+      controller.startTransaction(widget.request);
       _toggleButtonActive(true);
-      this._handlePaymentComplete(response);
     } catch (error) {
       _toggleButtonActive(true);
-      _showError(error.toString());
+      _showErrorAndClose(error.toString());
     }
   }
 
@@ -92,11 +93,7 @@ class _PaymentState extends State<PaymentWidget> {
     });
   }
 
-  void _handlePaymentComplete(ChargeResponse response) {
-    Navigator.pop(context, response); // return response to user
-  }
-
-  void _showError(final String errorMessage) {
+  void _showErrorAndClose(final String errorMessage) {
     FlutterwaveViewUtils.showToast(context, errorMessage);
     Navigator.pop(context); // return response to user
   }
@@ -111,5 +108,23 @@ class _PaymentState extends State<PaymentWidget> {
         widget.style.getDialogCancelTextStyle(),
         widget.style.getDialogContinueTextStyle(),
         _handlePayment);
+  }
+
+  @override
+  onTransactionError() {
+    _showErrorAndClose("transaction error");
+  }
+
+  @override
+  onCancelled() {
+    FlutterwaveViewUtils.showToast(context, "Transaction Cancelled");
+    Navigator.pop(context);
+  }
+
+  @override
+  onTransactionSuccess(String id, String txRef) {
+    final ChargeResponse chargeResponse = ChargeResponse(
+        status: "success", success: true, transactionId: id, txRef: txRef);
+    Navigator.pop(this.context, chargeResponse);
   }
 }
