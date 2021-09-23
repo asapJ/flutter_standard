@@ -41,7 +41,7 @@ Flutterwave version 3 API keys
 
 In your `pubspec.yaml` file add:
 
-1. `flutterwave_standard: 1.0.1`
+1. `flutterwave_standard: ^1.0.3`
 2. run `flutter pub get`
 
 <a id="usage"></a>
@@ -130,7 +130,7 @@ Create a `Flutterwave` instance by calling the constructor `Flutterwave` The con
 ## Built Using
 - [flutter](https://flutter.dev/)
 - [http](https://pub.dev/packages/http)
-- [webview_flutter](https://pub.dev/packages/webview_flutter)
+- [flutter_inappwebview](https://pub.dev/packages/flutter_inappwebview)
 - [fluttertoast](https://pub.dev/packages/fluttertoast)
 
 <a id="references"></a>
