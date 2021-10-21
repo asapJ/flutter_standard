@@ -62,9 +62,15 @@ class Flutterwave {
         subAccounts: subAccounts,
         meta: meta);
 
-    NavigationController controller =
-        NavigationController(Client(), style, TransactionCallbackImpl(context));
-    return controller.startTransaction(request);
+    return await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentWidget(
+          request: request,
+          style: style ?? FlutterwaveStyle(),
+        ),
+      ),
+    );
   }
 }
 
@@ -74,7 +80,7 @@ class TransactionCallbackImpl implements TransactionCallBack {
 
   void _showErrorAndClose(final String errorMessage) {
     FlutterwaveViewUtils.showToast(context, errorMessage);
-    // Navigator.pop(context); // return response to user
+    Navigator.pop(context); // return response to user
   }
 
   @override
@@ -85,14 +91,13 @@ class TransactionCallbackImpl implements TransactionCallBack {
   @override
   onCancelled() {
     FlutterwaveViewUtils.showToast(context, "Transaction Cancelled");
-    // Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   @override
   onTransactionSuccess(String id, String txRef) {
     final ChargeResponse chargeResponse = ChargeResponse(
         status: "success", success: true, transactionId: id, txRef: txRef);
-    // Navigator.pop(this.context, chargeResponse);
-    return chargeResponse;
+    Navigator.pop(this.context, chargeResponse);
   }
 }
