@@ -118,13 +118,12 @@ class _PaymentState extends State<PaymentWidget>
   @override
   onCancelled() {
     FlutterwaveViewUtils.showToast(context, "Transaction Cancelled");
-    Navigator.pop(context);
   }
 
   @override
   onTransactionSuccess(String id, String txRef) {
     final ChargeResponse chargeResponse = ChargeResponse(
         status: "success", success: true, transactionId: id, txRef: txRef);
-    Navigator.pop(this.context, chargeResponse);
+    return chargeResponse;
   }
 }
