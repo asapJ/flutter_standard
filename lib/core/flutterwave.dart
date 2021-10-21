@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutterwave_standard/core/TransactionCallBack.dart';
 import 'package:flutterwave_standard/models/requests/customer.dart';
 import 'package:flutterwave_standard/models/requests/customizations.dart';
 import 'package:flutterwave_standard/models/requests/standard_request.dart';
@@ -8,6 +9,10 @@ import 'package:flutterwave_standard/models/subaccount.dart';
 import 'package:flutterwave_standard/utils.dart';
 import 'package:flutterwave_standard/view/flutterwave_style.dart';
 import 'package:flutterwave_standard/view/payment_widget.dart';
+import 'package:flutterwave_standard/view/view_utils.dart';
+import 'package:http/http.dart';
+
+import 'navigation_controller.dart';
 
 class Flutterwave {
   BuildContext context;
@@ -41,7 +46,6 @@ class Flutterwave {
       this.meta,
       this.style});
 
-
   /// Starts Standard Transaction
   Future<ChargeResponse> charge() async {
     final request = StandardRequest(
@@ -58,14 +62,36 @@ class Flutterwave {
         subAccounts: subAccounts,
         meta: meta);
 
-    return await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PaymentWidget(
-          request: request,
-          style: style ?? FlutterwaveStyle(),
-        ),
-      ),
-    );
+    NavigationController controller =
+        NavigationController(Client(), style, TransactionCallbackImpl(context));
+    return controller.startTransaction(request);
+  }
+}
+
+class TransactionCallbackImpl implements TransactionCallBack {
+  final BuildContext context;
+  TransactionCallbackImpl(this.context);
+
+  void _showErrorAndClose(final String errorMessage) {
+    FlutterwaveViewUtils.showToast(context, errorMessage);
+    Navigator.pop(context); // return response to user
+  }
+
+  @override
+  onTransactionError() {
+    _showErrorAndClose("transaction error");
+  }
+
+  @override
+  onCancelled() {
+    FlutterwaveViewUtils.showToast(context, "Transaction Cancelled");
+    Navigator.pop(context);
+  }
+
+  @override
+  onTransactionSuccess(String id, String txRef) {
+    final ChargeResponse chargeResponse = ChargeResponse(
+        status: "success", success: true, transactionId: id, txRef: txRef);
+    Navigator.pop(this.context, chargeResponse);
   }
 }

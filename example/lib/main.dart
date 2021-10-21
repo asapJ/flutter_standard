@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
-import 'package:flutterwave_standard/models/subaccount.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
@@ -39,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String selectedCurrency = "";
 
   bool isTestMode = true;
-  final pbk = "FLWPUBK_TEST";
+  final pbk =  "FLWPUBK_TEST-617bb00f05df5b15b1a73d5bc52f9d31-X";
 
   @override
   Widget build(BuildContext context) {
@@ -151,9 +150,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: double.infinity,
                 height: 50,
                 margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                child: RaisedButton(
+                child: TextButton(
                   onPressed: this._onPressed,
-                  color: Colors.blue,
                   child: Text(
                     "Make Payment",
                     style: TextStyle(color: Colors.white),
@@ -191,11 +189,8 @@ class _MyHomePageState extends State<MyHomePage> {
         fontSize: 18,
       ),
       mainBackgroundColor: Colors.indigo,
-      mainTextStyle: TextStyle(
-        color: Colors.indigo,
-        fontSize: 19,
-        letterSpacing: 2
-      ),
+      mainTextStyle:
+          TextStyle(color: Colors.indigo, fontSize: 19, letterSpacing: 2),
       dialogBackgroundColor: Colors.greenAccent,
       appBarIcon: Icon(Icons.message, color: Colors.purple),
       buttonText: "Pay $selectedCurrency${amountController.text}",
@@ -209,23 +204,15 @@ class _MyHomePageState extends State<MyHomePage> {
         name: "FLW Developer",
         phoneNumber: this.phoneNumberController.text ?? "12345678",
         email: "customer@customer.com");
-    
-    final subAccounts = [
-      SubAccount(id: "RS_1A3278129B808CB588B53A14608169AD", transactionChargeType: "flat", transactionPercentage: 25),
-      SubAccount(id: "RS_C7C265B8E4B16C2D472475D7F9F4426A", transactionChargeType: "flat", transactionPercentage: 50)
-    ];
 
     final Flutterwave flutterwave = Flutterwave(
         context: context,
         style: style,
-        publicKey: this.publicKeyController.text.trim().isEmpty
-            ? this.getPublicKey()
-            : this.publicKeyController.text.trim(),
+        publicKey: pbk,
         currency: this.selectedCurrency,
         txRef: Uuid().v1(),
         amount: this.amountController.text.toString().trim(),
         customer: customer,
-        subAccounts: subAccounts,
         paymentOptions: "card, payattitude",
         customization: Customization(title: "Test Payment"),
         redirectUrl: "https://www.google.com",
@@ -237,11 +224,6 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       this.showLoading("No Response!");
     }
-  }
-
-  String getPublicKey() {
-    if (isTestMode) return "FLWPUBK_TEST--X";
-    return "FLWPUBK-X";
   }
 
   void _openBottomSheet() {
