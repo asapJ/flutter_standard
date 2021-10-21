@@ -35,7 +35,7 @@ class _PaymentState extends State<PaymentWidget>
   }
 
   void _handlePayment() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(milliseconds: 200));
     try {
       // Navigator.of(context).pop(); // to remove confirmation dialog
       controller.startTransaction(widget.request);
