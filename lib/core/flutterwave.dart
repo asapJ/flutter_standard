@@ -10,9 +10,6 @@ import 'package:flutterwave_standard/utils.dart';
 import 'package:flutterwave_standard/view/flutterwave_style.dart';
 import 'package:flutterwave_standard/view/payment_widget.dart';
 import 'package:flutterwave_standard/view/view_utils.dart';
-import 'package:http/http.dart';
-
-import 'navigation_controller.dart';
 
 class Flutterwave {
   BuildContext context;
@@ -22,6 +19,8 @@ class Flutterwave {
   Customer customer;
   bool isTestMode;
   String publicKey;
+  ///Defaults to "card, ussd"
+  ///You can other options and separate them with comma
   String paymentOptions;
   String? currency;
   String? paymentPlanId;
@@ -36,7 +35,7 @@ class Flutterwave {
       required this.txRef,
       required this.amount,
       required this.customer,
-      required this.paymentOptions,
+      this.paymentOptions = "card, ussd",
       required this.customization,
       required this.isTestMode,
       this.currency,
