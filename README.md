@@ -123,7 +123,7 @@ You can also follow us [@FlutterwaveEng](https://twitter.com/FlutterwaveEng) and
 
 # Contribution guidelines
 
-Read more about our community contribution guidelines [here](/CONTRIBUTING).
+Read more about our community contribution guidelines [here](/CONTRIBUTING.md).
 
 # License
 
