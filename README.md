@@ -127,14 +127,6 @@ Read more about our community contribution guidelines [here](/CONTRIBUTING.md).
 
 # License
 
-By contributing to the {{language}} library, you agree that your contributions will be licensed under its [MIT license](/LICENSE).
+By contributing to the Flutter library, you agree that your contributions will be licensed under its [MIT license](/LICENSE).
 
 Copyright (c) Flutterwave Inc.
-
-
-# Built Using
-- [flutter](https://flutter.dev/)
-- [http](https://pub.dev/packages/http)
-- [flutter_inappwebview](https://pub.dev/packages/flutter_inappwebview)
-- [fluttertoast](https://pub.dev/packages/fluttertoast)
-
