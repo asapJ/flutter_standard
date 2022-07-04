@@ -46,7 +46,7 @@ To create an instance, you should call the Flutterwave constructor. This constru
 -  `email`
 -  `fullName`
 -  `txRef`
--  `isDebug`
+-  `isTestMode`
 -  `paymentOptions`
 -  `Customization` 
 
@@ -88,7 +88,7 @@ _handlePaymentInitialization() async {
             customer: customer,
             paymentOptions: "ussd, card, barter, payattitude",
             customization: Customization(title: "Test Payment"),
-            isDebug: true);
+            isTestMode: true);
       }
 ```
 
