@@ -53,7 +53,7 @@ class _FlutterwaveWebviewState extends State<FlutterwaveWebview> {
 
   String _getRedirectUrl() {
     return this.widget._redirectUrl.isEmpty
-        ? Utils.DEFAULT_URL
+        ? 'www.google.com'
         : this.widget._redirectUrl;
   }
 
